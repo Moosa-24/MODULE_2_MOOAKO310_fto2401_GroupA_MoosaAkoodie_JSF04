@@ -16,7 +16,7 @@ Product Grid: View a grid of product cards featuring images, titles, prices, and
 Product Details Page: Navigate to a detailed page for each product to see the title, description, image, price, category, rating, and reviews.
 Filtering: Filter products by category effortlessly.
 Sorting: Sort products by price (lowest to highest or highest to lowest).
-
+Loading States: Visual loading indicators while data is being fetched.
 Persistence: Your filters and sorting settings persist even when navigating between product details and the main grid.
 File Breakdown
 index.html: The main HTML file.

@@ -49,7 +49,8 @@
     </div>
 
     <!-- Product List Component -->
-    <div class="product-list">
+    <div v-if="loading" class="loading">Loading...</div>
+    <div v-else class="product-list">
       <div class="product-container">
         <div class="product-card" v-for="product in products" :key="product.id" @click="goToProduct(product.id)">
           <img :src="product.image" :alt="product.title" class="product-image"/>
@@ -81,6 +82,7 @@ export default {
       selectedCategory: '',
       selectedSort: '',
       cartCount: 0,
+      loading: false,
     };
   },
   mounted() {
@@ -89,10 +91,13 @@ export default {
   },
   methods: {
     /**
-     * Fetches products from the API.
+     * Fetches products based on the selected category and updates the product list.
+     * Shows a loading indicator while data is being fetched.
+     * The loading state is maintained for an additional 2 seconds after data is fetched.
      * @param {string} category - The category to filter products by.
      */
     async fetchProducts(category) {
+      this.loading = true;
       let url = 'https://fakestoreapi.com/products';
       if (category && category !== 'all') {
         url += `/category/${category}`;
@@ -104,9 +109,14 @@ export default {
         rating: Math.floor(Math.random() * 5) + 1 // Random rating between 1 and 5
       }));
       this.sortProducts();
+      
+      // Delay hiding the loading state by 1 second
+      setTimeout(() => {
+        this.loading = false;
+      }, 1000);
     },
     /**
-     * Fetches categories from the API.
+     * Fetches the list of product categories.
      */
     async fetchCategories() {
       const response = await fetch('https://fakestoreapi.com/products/categories');
@@ -120,7 +130,7 @@ export default {
       this.fetchProducts(this.selectedCategory);
     },
     /**
-     * Sorts products based on the selected sort option.
+     * Sorts the product list based on the selected sort order.
      */
     sortProducts() {
       if (this.selectedSort === 'asc') {
@@ -130,18 +140,18 @@ export default {
       }
     },
     /**
-     * Navigates to the product detail page.
-     * @param {number} id - The ID of the product.
+     * Navigates to the product detail page for the selected product.
+     * @param {number} id - The ID of the product to navigate to.
      */
     goToProduct(id) {
       this.$router.push({ name: 'ProductDetail', params: { id } });
     },
     /**
-     * Adds a product to the cart.
+     * Adds the specified product to the cart.
+     * Increments the cart count.
      * @param {Object} product - The product to add to the cart.
      */
     addToCart(product) {
-      // Implement add to cart functionality
       this.cartCount++;
     }
   }
