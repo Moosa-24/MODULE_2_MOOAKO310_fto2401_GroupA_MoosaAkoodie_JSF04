@@ -4,7 +4,7 @@ import ProductDetail from '../views/ProductDetail.vue';
 
 const routes = [
   { path: '/', component: HomePage },
-  { path: '/product/:id', component: ProductDetail, props: true }
+  { path: '/product/:id', name: 'ProductDetail', component: ProductDetail, props: true }
 ];
 
 const router = createRouter({
