@@ -1,4 +1,3 @@
-
 <template>
   <div v-if="product">
     <!-- Header Component -->
@@ -28,46 +27,58 @@
       </div>
     </header>
 
-    <!-- Product Detail Content -->
+    <!-- Product Detail Component -->
     <div class="product-detail">
-      <img :src="product.image" :alt="product.title" class="modal-img"/>
-      <h2 class="modal-title">{{ product.title }}</h2>
-      <p class="modal-price">${{ product.price }}</p>
-      <p class="modal-category">{{ product.category }}</p>
-      <div class="stars modal-rating">
+      <img :src="product.image" :alt="product.title" class="product-image"/>
+      <h1 class="product-title">{{ product.title }}</h1>
+      <p class="product-description">{{ product.description }}</p>
+      <div class="stars">
         <span class="star" :class="{ 'filled': product.rating >= 1 }">&#9733;</span>
         <span class="star" :class="{ 'filled': product.rating >= 2 }">&#9733;</span>
         <span class="star" :class="{ 'filled': product.rating >= 3 }">&#9733;</span>
         <span class="star" :class="{ 'filled': product.rating >= 4 }">&#9733;</span>
         <span class="star" :class="{ 'filled': product.rating >= 5 }">&#9733;</span>
       </div>
-      <p class="modal-desc">{{ product.description }}</p>
-      <button class="add-to-cart" @click="addToCart">Add to Cart</button>
-      <button class="favorites-btn">
-        <span class="favorites-icon"></span>
-      </button>
+      <p class="product-price">${{ product.price }}</p>
+      <button class="add-to-cart" @click="addToCart(product)">Add to Cart</button>
     </div>
-  </div>
-  <div v-else>
-    <p>Loading...</p>
   </div>
 </template>
 
 <script>
 export default {
+  props: {
+    id: {
+      type: String,
+      required: true
+    }
+  },
   data() {
     return {
       product: null,
-      cartCount: 0
+      cartCount: 0,
     };
   },
-  async mounted() {
-    const id = this.$route.params.id;
-    const response = await fetch(`https://fakestoreapi.com/products/${id}`);
-    this.product = await response.json();
+  mounted() {
+    this.fetchProduct();
   },
   methods: {
-    addToCart() {
+    /**
+     * Fetches the product details from the API.
+     */
+    async fetchProduct() {
+      const response = await fetch(`https://fakestoreapi.com/products/${this.id}`);
+      const data = await response.json();
+      this.product = {
+        ...data,
+        rating: Math.floor(Math.random() * 5) + 1 // Random rating between 1 and 5
+      };
+    },
+    /**
+     * Adds a product to the cart.
+     * @param {Object} product - The product to add to the cart.
+     */
+    addToCart(product) {
       // Implement add to cart functionality
       this.cartCount++;
     }

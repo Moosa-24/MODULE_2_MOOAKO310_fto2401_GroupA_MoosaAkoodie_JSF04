@@ -88,6 +88,10 @@ export default {
     this.fetchProducts('all');
   },
   methods: {
+    /**
+     * Fetches products from the API.
+     * @param {string} category - The category to filter products by.
+     */
     async fetchProducts(category) {
       let url = 'https://fakestoreapi.com/products';
       if (category && category !== 'all') {
@@ -101,14 +105,23 @@ export default {
       }));
       this.sortProducts();
     },
+    /**
+     * Fetches categories from the API.
+     */
     async fetchCategories() {
       const response = await fetch('https://fakestoreapi.com/products/categories');
       const data = await response.json();
       this.categories = data;
     },
+    /**
+     * Filters products based on the selected category.
+     */
     filterProducts() {
       this.fetchProducts(this.selectedCategory);
     },
+    /**
+     * Sorts products based on the selected sort option.
+     */
     sortProducts() {
       if (this.selectedSort === 'asc') {
         this.products.sort((a, b) => a.price - b.price);
@@ -116,9 +129,17 @@ export default {
         this.products.sort((a, b) => b.price - a.price);
       }
     },
+    /**
+     * Navigates to the product detail page.
+     * @param {number} id - The ID of the product.
+     */
     goToProduct(id) {
       this.$router.push({ name: 'ProductDetail', params: { id } });
     },
+    /**
+     * Adds a product to the cart.
+     * @param {Object} product - The product to add to the cart.
+     */
     addToCart(product) {
       // Implement add to cart functionality
       this.cartCount++;
