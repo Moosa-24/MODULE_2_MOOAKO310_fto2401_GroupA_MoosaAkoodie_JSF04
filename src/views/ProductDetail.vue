@@ -6,7 +6,7 @@
       <header class="header">
         <div class="header-content">
           <div class="brand">
-            <img src="" alt="Brand Logo" class="brand-logo">
+            <img src="../images/shop.png" alt="Brand Logo" class="brand-logo">
             <h1 class="header-title">SwiftCart</h1>
           </div>
           <div class="header-right">
