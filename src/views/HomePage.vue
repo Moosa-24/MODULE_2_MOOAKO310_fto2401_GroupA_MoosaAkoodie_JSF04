@@ -48,11 +48,11 @@
       </div>
     </div>
 
-    <!-- Product List Component -->
+    <!-- Loading State and Product List -->
     <div v-if="loading" class="loading">Loading...</div>
     <div v-else class="product-list">
       <div class="product-container">
-        <div class="product-card" v-for="product in products" :key="product.id" @click="goToProduct(product.id)">
+        <div class="product-card" v-for="product in displayedProducts" :key="product.id" @click="goToProduct(product.id)">
           <img :src="product.image" :alt="product.title" class="product-image"/>
           <h2 class="product-title">{{ product.title }}</h2>
           <div class="stars">
@@ -83,6 +83,7 @@ export default {
       selectedSort: '',
       cartCount: 0,
       loading: false,
+      originalProducts: [], // To store the initial order of products
     };
   },
   mounted() {
@@ -108,12 +109,13 @@ export default {
         ...product,
         rating: Math.floor(Math.random() * 5) + 1 // Random rating between 1 and 5
       }));
+      this.originalProducts = [...this.products]; // Store the original order of products
       this.sortProducts();
       
-      // Delay hiding the loading state by 1 second
+      // Delay hiding the loading state by 2 seconds
       setTimeout(() => {
         this.loading = false;
-      }, 1000);
+      }, 2000);
     },
     /**
      * Fetches the list of product categories.
@@ -137,6 +139,8 @@ export default {
         this.products.sort((a, b) => a.price - b.price);
       } else if (this.selectedSort === 'desc') {
         this.products.sort((a, b) => b.price - a.price);
+      } else {
+        this.products = [...this.originalProducts]; // Revert to original order
       }
     },
     /**
@@ -153,6 +157,15 @@ export default {
      */
     addToCart(product) {
       this.cartCount++;
+    }
+  },
+  computed: {
+    /**
+     * Returns the products to be displayed based on the current loading state.
+     * @returns {Array} - The list of products to display.
+     */
+    displayedProducts() {
+      return this.loading ? [] : this.products;
     }
   }
 }
