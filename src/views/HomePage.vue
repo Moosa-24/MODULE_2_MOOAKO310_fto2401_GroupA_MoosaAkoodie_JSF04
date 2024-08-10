@@ -55,13 +55,6 @@
         <div class="product-card" v-for="product in displayedProducts" :key="product.id" @click="goToProduct(product.id)">
           <img :src="product.image" :alt="product.title" class="product-image"/>
           <h2 class="product-title">{{ product.title }}</h2>
-          <div class="stars">
-            <span class="star" :class="{ 'filled': product.rating >= 1 }">&#9733;</span>
-            <span class="star" :class="{ 'filled': product.rating >= 2 }">&#9733;</span>
-            <span class="star" :class="{ 'filled': product.rating >= 3 }">&#9733;</span>
-            <span class="star" :class="{ 'filled': product.rating >= 4 }">&#9733;</span>
-            <span class="star" :class="{ 'filled': product.rating >= 5 }">&#9733;</span>
-          </div>
           <p class="product-price">${{ product.price }}</p>
           <button class="add-to-cart" @click.stop="addToCart(product)">Add to Cart</button>
           <button class="favorites-btn">
