@@ -80,16 +80,15 @@ export default {
     };
   },
   mounted() {
+    // Read query parameters and apply filters and sorting
+    const params = new URLSearchParams(this.$route.query);
+    this.selectedCategory = params.get('category') || '';
+    this.selectedSort = params.get('sort') || '';
+    
     this.fetchCategories();
-    this.fetchProducts('all');
+    this.fetchProducts(this.selectedCategory);
   },
   methods: {
-    /**
-     * Fetches products based on the selected category and updates the product list.
-     * Shows a loading indicator while data is being fetched.
-     * The loading state is maintained for an additional 2 seconds after data is fetched.
-     * @param {string} category - The category to filter products by.
-     */
     async fetchProducts(category) {
       this.loading = true;
       let url = 'https://fakestoreapi.com/products';
@@ -110,23 +109,15 @@ export default {
         this.loading = false;
       }, 2000);
     },
-    /**
-     * Fetches the list of product categories.
-     */
     async fetchCategories() {
       const response = await fetch('https://fakestoreapi.com/products/categories');
       const data = await response.json();
       this.categories = data;
     },
-    /**
-     * Filters products based on the selected category.
-     */
     filterProducts() {
+      this.updateQueryParams();
       this.fetchProducts(this.selectedCategory);
     },
-    /**
-     * Sorts the product list based on the selected sort order.
-     */
     sortProducts() {
       if (this.selectedSort === 'asc') {
         this.products.sort((a, b) => a.price - b.price);
@@ -136,27 +127,29 @@ export default {
         this.products = [...this.originalProducts]; // Revert to original order
       }
     },
-    /**
-     * Navigates to the product detail page for the selected product.
-     * @param {number} id - The ID of the product to navigate to.
-     */
     goToProduct(id) {
-      this.$router.push({ name: 'ProductDetail', params: { id } });
+      this.$router.push({
+        name: 'ProductDetail',
+        params: { id },
+        query: {
+          category: this.selectedCategory,
+          sort: this.selectedSort
+        }
+      });
     },
-    /**
-     * Adds the specified product to the cart.
-     * Increments the cart count.
-     * @param {Object} product - The product to add to the cart.
-     */
     addToCart(product) {
       this.cartCount++;
+    },
+    updateQueryParams() {
+      this.$router.push({
+        query: {
+          category: this.selectedCategory,
+          sort: this.selectedSort
+        }
+      });
     }
   },
   computed: {
-    /**
-     * Returns the products to be displayed based on the current loading state.
-     * @returns {Array} - The list of products to display.
-     */
     displayedProducts() {
       return this.loading ? [] : this.products;
     }

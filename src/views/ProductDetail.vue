@@ -80,7 +80,11 @@ export default {
       this.cartCount++;
     },
     goToHomePage() {
-      this.$router.push({ path: '/' });
+      // Navigate to the home page with query parameters
+      this.$router.push({
+        path: '/',
+        query: this.$route.query
+      });
     }
   }
 }
