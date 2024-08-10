@@ -54,3 +54,7 @@ Persistence: Your filter and sorting choices will be preserved as you navigate b
 Vue 3: For building the user interface.
 Vue Router: For navigating between product grid and detailed views.
 HTML/CSS: For structuring and styling the app.
+
+# App Currently Deployed
+
+The app is currently deployed using Vercel at this link: [module-2-mooako-310-fto2401-group-a-moosa-akoodie-7r0sicrha.vercel.app](https://module-2-mooako-310-fto2401-group-a-moosa-akoodie-7r0sicrha.vercel.app)
