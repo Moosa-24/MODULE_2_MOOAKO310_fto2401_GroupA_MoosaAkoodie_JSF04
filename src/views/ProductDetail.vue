@@ -42,6 +42,7 @@
           <span class="star" :class="{ 'filled': product.rating >= 4 }">&#9733;</span>
           <span class="star" :class="{ 'filled': product.rating >= 5 }">&#9733;</span>
         </div>
+        <p class="product-reviews">{{ product.reviewCount }} Reviews</p>
         <button class="add-to-cart" @click="addToCart(product)">Add to Cart</button>
       </div>
     </div>
@@ -73,7 +74,8 @@ export default {
       const data = await response.json();
       this.product = {
         ...data,
-        rating: Math.floor(Math.random() * 5) + 1 // Random rating between 1 and 5
+        rating: Math.floor(Math.random() * 5) + 1, // Random rating between 1 and 5
+        reviewCount: Math.floor(Math.random() * 100) + 1 // Random number of reviews between 1 and 100
       };
       
       // Delay hiding the loading state by 1 second
