@@ -7,7 +7,7 @@
         <div class="header-content">
           <div class="brand">
             <img src="../images/shop.png" alt="Brand Logo" class="brand-logo">
-            <h1 class="header-title">SwiftCart</h1>
+            <h1 class="header-title" @click="goToHomePage">SwiftCart</h1>
           </div>
           <div class="header-right">
             <h3 class="wishlist">
@@ -62,11 +62,6 @@ export default {
     this.fetchProduct();
   },
   methods: {
-    /**
-     * Fetches the details of a specific product based on the product ID from the route params.
-     * Shows a loading indicator while data is being fetched.
-     * The loading state is maintained for an additional 2 seconds after data is fetched.
-     */
     async fetchProduct() {
       this.loading = true;
       const productId = this.$route.params.id;
@@ -74,22 +69,18 @@ export default {
       const data = await response.json();
       this.product = {
         ...data,
-        rating: Math.floor(Math.random() * 5) + 1, // Random rating between 1 and 5
-        reviewCount: Math.floor(Math.random() * 100) + 1 // Random number of reviews between 1 and 100
+        rating: Math.floor(Math.random() * 5) + 1,
+        reviewCount: Math.floor(Math.random() * 100) + 1
       };
-      
-      // Delay hiding the loading state by 1 second
       setTimeout(() => {
         this.loading = false;
       }, 1000);
     },
-    /**
-     * Adds the specified product to the cart.
-     * Increments the cart count.
-     * @param {Object} product - The product to add to the cart.
-     */
     addToCart(product) {
       this.cartCount++;
+    },
+    goToHomePage() {
+      this.$router.push({ path: '/' });
     }
   }
 }
