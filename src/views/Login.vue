@@ -35,6 +35,11 @@ export default {
       this.passwordFieldType = this.passwordFieldType === 'password' ? 'text' : 'password';
     },
     async login() {
+      if (!this.username || !this.password) {
+        this.error = "Username and password cannot be empty.";
+        return;
+      }
+
       this.loading = true;
       this.error = null;
 
