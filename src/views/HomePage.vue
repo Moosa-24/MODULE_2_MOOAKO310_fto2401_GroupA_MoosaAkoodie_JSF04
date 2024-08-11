@@ -22,7 +22,11 @@
             </a>
             <span class="cart-badge">{{ cartCount }}</span>
           </div>
-          <div class="login"><a href="#">Login</a></div>
+          <!-- Conditional Login/Logout Button -->
+          <div class="login">
+            <router-link v-if="!isLoggedIn" to="/login">Login</router-link>
+            <a href="#" v-else @click="logout">Logout</a>
+          </div>
         </div>
       </div>
     </header>
@@ -77,6 +81,7 @@ export default {
       cartCount: 0,
       loading: false,
       originalProducts: [], // To store the initial order of products
+      isLoggedIn: !!localStorage.getItem('token') // Check if the user is logged in
     };
   },
   mounted() {
@@ -147,6 +152,11 @@ export default {
           sort: this.selectedSort
         }
       });
+    },
+    logout() {
+      localStorage.removeItem('token');
+      this.isLoggedIn = false;
+      this.$router.push('/');
     }
   },
   computed: {
