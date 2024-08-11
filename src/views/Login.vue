@@ -59,7 +59,8 @@ export default {
 
         if (response.ok) {
           localStorage.setItem('token', data.token);
-          this.$router.push('/');
+          // Redirect to the original page or home page
+          this.$router.push(this.$route.query.redirect || '/');
         } else {
           this.error = "Login failed. Please check your credentials.";
         }
