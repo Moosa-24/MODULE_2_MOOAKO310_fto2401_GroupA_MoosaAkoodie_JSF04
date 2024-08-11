@@ -7,7 +7,10 @@
       </div>
       <div class="form-group">
         <label for="password">Password:</label>
-        <input type="password" v-model="password" id="password" required />
+        <input :type="passwordFieldType" v-model="password" id="password" required />
+        <button type="button" @click="togglePasswordVisibility">
+          {{ passwordFieldType === 'password' ? 'Show' : 'Hide' }} Password
+        </button>
       </div>
       <button type="submit">Log In</button>
     </form>
@@ -24,9 +27,13 @@ export default {
       password: '',
       loading: false,
       error: null,
+      passwordFieldType: 'password',
     };
   },
   methods: {
+    togglePasswordVisibility() {
+      this.passwordFieldType = this.passwordFieldType === 'password' ? 'text' : 'password';
+    },
     async login() {
       this.loading = true;
       this.error = null;
