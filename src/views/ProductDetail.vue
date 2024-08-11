@@ -34,11 +34,17 @@
     <!-- Product Detail Component -->
     <div v-if="loading" class="loading">Loading...</div>
     <div v-else class="product-detail" v-if="product">
-      <h2 class="product-title">{{ product.title }}</h2>
       <img :src="product.image" :alt="product.title" class="product-image"/>
+      <h2 class="product-title">{{ product.title }}</h2>
       <p class="product-description">{{ product.description }}</p>
       <p class="product-price">${{ product.price }}</p>
-      <p class="product-rating">Rating: {{ product.rating }} / 5</p>
+      <div class="stars">
+        <span class="star" :class="{ 'filled': product.rating >= 1 }">&#9733;</span>
+        <span class="star" :class="{ 'filled': product.rating >= 2 }">&#9733;</span>
+        <span class="star" :class="{ 'filled': product.rating >= 3 }">&#9733;</span>
+        <span class="star" :class="{ 'filled': product.rating >= 4 }">&#9733;</span>
+        <span class="star" :class="{ 'filled': product.rating >= 5 }">&#9733;</span>
+      </div>
       <p class="product-reviews">{{ product.reviewCount }} Reviews</p>
       <button class="add-to-cart" @click="addToCart(product)">Add to Cart</button>
     </div>
