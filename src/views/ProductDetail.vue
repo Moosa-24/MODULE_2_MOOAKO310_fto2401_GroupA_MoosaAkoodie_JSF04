@@ -36,6 +36,7 @@
     <div v-else class="product-detail" v-if="product">
       <img :src="product.image" :alt="product.title" class="product-image"/>
       <h2 class="product-title">{{ product.title }}</h2>
+      <p class="product-category">{{ product.category }}</p>
       <p class="product-description">{{ product.description }}</p>
       <p class="product-price">${{ product.price }}</p>
       <div class="stars">

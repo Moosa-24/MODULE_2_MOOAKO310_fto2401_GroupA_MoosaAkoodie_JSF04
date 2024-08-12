@@ -59,6 +59,7 @@
         <div class="product-card" v-for="product in displayedProducts" :key="product.id" @click="goToProduct(product.id)">
           <img :src="product.image" :alt="product.title" class="product-image"/>
           <h2 class="product-title">{{ product.title }}</h2>
+          <p class="product-category">{{ product.category }}</p>
           <p class="product-price">${{ product.price }}</p>
           <button class="add-to-cart" @click.stop="addToCart(product)">Add to Cart</button>
           <button class="favorites-btn">
