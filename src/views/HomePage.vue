@@ -15,7 +15,7 @@
             </a>
           </h3>
           <div class="cart">
-            <a href="#">
+            <a href="/cart">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="cart-icon">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"></path>
               </svg>
@@ -81,18 +81,17 @@ export default {
       selectedSort: '',
       cartCount: 0,
       loading: false,
-      originalProducts: [], // To store the initial order of products
-      isLoggedIn: !!localStorage.getItem('token') // Check if the user is logged in
+      originalProducts: [],
+      isLoggedIn: !!localStorage.getItem('token')
     };
   },
   mounted() {
-    // Read query parameters and apply filters and sorting
-    const params = new URLSearchParams(this.$route.query);
-    this.selectedCategory = params.get('category') || '';
-    this.selectedSort = params.get('sort') || '';
+    this.selectedCategory = new URLSearchParams(this.$route.query).get('category') || '';
+    this.selectedSort = new URLSearchParams(this.$route.query).get('sort') || '';
     
     this.fetchCategories();
     this.fetchProducts(this.selectedCategory);
+    this.loadCart();
   },
   methods: {
     async fetchProducts(category) {
@@ -105,20 +104,18 @@ export default {
       const data = await response.json();
       this.products = data.map(product => ({
         ...product,
-        rating: Math.floor(Math.random() * 5) + 1 // Random rating between 1 and 5
+        rating: Math.floor(Math.random() * 5) + 1
       }));
-      this.originalProducts = [...this.products]; // Store the original order of products
+      this.originalProducts = [...this.products];
       this.sortProducts();
       
-      // Delay hiding the loading state by 2 seconds
       setTimeout(() => {
         this.loading = false;
       }, 2000);
     },
     async fetchCategories() {
       const response = await fetch('https://fakestoreapi.com/products/categories');
-      const data = await response.json();
-      this.categories = data;
+      this.categories = await response.json();
     },
     filterProducts() {
       this.updateQueryParams();
@@ -130,7 +127,7 @@ export default {
       } else if (this.selectedSort === 'desc') {
         this.products.sort((a, b) => b.price - a.price);
       } else {
-        this.products = [...this.originalProducts]; // Revert to original order
+        this.products = [...this.originalProducts];
       }
     },
     goToProduct(id) {
@@ -144,7 +141,19 @@ export default {
       });
     },
     addToCart(product) {
-      this.cartCount++;
+      let cart = JSON.parse(localStorage.getItem('cart')) || [];
+      const existingItem = cart.find(item => item.id === product.id);
+      if (existingItem) {
+        existingItem.quantity++;
+      } else {
+        cart.push({ ...product, quantity: 1 });
+      }
+      localStorage.setItem('cart', JSON.stringify(cart));
+      this.loadCart();
+    },
+    loadCart() {
+      let cart = JSON.parse(localStorage.getItem('cart')) || [];
+      this.cartCount = cart.reduce((count, item) => count + item.quantity, 0);
     },
     updateQueryParams() {
       this.$router.push({
@@ -156,7 +165,9 @@ export default {
     },
     logout() {
       localStorage.removeItem('token');
+      localStorage.removeItem('cart');
       this.isLoggedIn = false;
+      this.cartCount = 0;
       this.$router.push('/');
     }
   },
