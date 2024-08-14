@@ -5,7 +5,7 @@
       <div class="header-content">
         <div class="brand">
           <img src="../images/shop.png" alt="Brand Logo" class="brand-logo">
-          <h1 class="header-title">SwiftCart</h1>
+          <h1 class="header-title" @click="goToHomePage">SwiftCart</h1>
         </div>
         <div class="header-right">
           <h3 class="wishlist">
@@ -21,6 +21,12 @@
               </svg>
             </a>
             <span class="cart-badge">{{ cartCount }}</span>
+          </div>
+          <!-- Comparison List Link -->
+          <div class="comparison">
+            <a href="/comparison" class="comparison-btn">
+              <span class="comparison-text">Comparison</span>
+            </a>
           </div>
           <!-- Conditional Login/Logout Button -->
           <div class="login">
@@ -52,7 +58,6 @@
     </div>
   </div>
 </template>
-
 
 <script>
 export default {
@@ -105,6 +110,9 @@ export default {
         this.loading = false;
       }
     },
-  },
-};
+    goToHomePage() {
+      this.$router.push('/');
+    }
+  }
+}
 </script>

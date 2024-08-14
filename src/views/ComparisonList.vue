@@ -11,7 +11,7 @@
           <h3 class="wishlist">
             <a href="#" class="wishlist-btn">
               <span class="wishlist-icon">♡</span>
-              <span class="wishlist-text">Wishlist</span>
+              <span>Wishlist</span>
             </a>
           </h3>
           <div class="cart">
@@ -37,15 +37,35 @@
       </div>
     </header>
 
-    <!-- Product Detail Content -->
-    <div class="product-detail">
-      <img :src="product.image" :alt="product.title" class="product-image">
-      <h2 class="product-title">{{ product.title }}</h2>
-      <p class="product-category">{{ product.category }}</p>
-      <p class="product-price">${{ product.price }}</p>
-      <p class="product-description">{{ product.description }}</p>
-      <button class="add-to-cart" @click="addToCart(product)">Add to Cart</button>
-      <button @click="addToComparison(product)">Add to Comparison</button>
+    <!-- Comparison List Content -->
+    <div v-if="isLoggedIn">
+      <h2>Comparison List</h2>
+      <button @click="clearComparisonList">Clear Comparison List</button>
+      <table>
+        <thead>
+          <tr>
+            <th>Image</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Rating</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="item in comparisonList" :key="item.id">
+            <td><img :src="item.image" :alt="item.title" class="product-image"/></td>
+            <td>{{ item.title }}</td>
+            <td>{{ item.description }}</td>
+            <td>${{ item.price }}</td>
+            <td>{{ item.rating }}</td>
+            <td><button @click="removeFromComparison(item.id)">Remove</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div v-else>
+      <p>You need to be logged in to view the comparison list.</p>
     </div>
   </div>
 </template>
@@ -54,41 +74,27 @@
 export default {
   data() {
     return {
-      product: {},
+      comparisonList: [],
       isLoggedIn: !!localStorage.getItem('token'),
       cartCount: 0
     };
   },
   async mounted() {
-    const productId = this.$route.params.id;
-    const response = await fetch(`https://fakestoreapi.com/products/${productId}`);
-    this.product = await response.json();
-    this.loadCart();
+    if (this.isLoggedIn) {
+      this.comparisonList = JSON.parse(localStorage.getItem('comparisonList')) || [];
+      this.loadCart();
+    } else {
+      this.$router.push('/login');
+    }
   },
   methods: {
-    addToCart(product) {
-      let cart = JSON.parse(localStorage.getItem('cart')) || [];
-      const existingItem = cart.find(item => item.id === product.id);
-      if (existingItem) {
-        existingItem.quantity++;
-      } else {
-        cart.push({ ...product, quantity: 1 });
-      }
-      localStorage.setItem('cart', JSON.stringify(cart));
-      this.loadCart();
+    clearComparisonList() {
+      localStorage.removeItem('comparisonList');
+      this.comparisonList = [];
     },
-    addToComparison(product) {
-      if (!this.isLoggedIn) {
-        alert('You must be logged in to add items to the comparison list.');
-        return;
-      }
-      
-      let comparisonList = JSON.parse(localStorage.getItem('comparisonList')) || [];
-      const existingItem = comparisonList.find(item => item.id === product.id);
-      if (!existingItem) {
-        comparisonList.push(product);
-        localStorage.setItem('comparisonList', JSON.stringify(comparisonList));
-      }
+    removeFromComparison(productId) {
+      this.comparisonList = this.comparisonList.filter(item => item.id !== productId);
+      localStorage.setItem('comparisonList', JSON.stringify(this.comparisonList));
     },
     loadCart() {
       let cart = JSON.parse(localStorage.getItem('cart')) || [];
@@ -108,3 +114,29 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+
+.comparison-icon {
+  margin-right: 0.5rem;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+th {
+  background-color: #f2f2f2;
+}
+
+.product-image {
+  width: 100px;
+  height: auto;
+}
+</style>

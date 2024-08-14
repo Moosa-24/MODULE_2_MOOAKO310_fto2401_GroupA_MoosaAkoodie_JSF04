@@ -22,6 +22,12 @@
             </a>
             <span class="cart-badge">{{ cartCount }}</span>
           </div>
+          <!-- Comparison List Link -->
+          <div class="comparison">
+            <a href="/comparison" class="comparison-btn">
+              <span class="comparison-text">Comparison</span>
+            </a>
+          </div>
           <!-- Conditional Login/Logout Button -->
           <div class="login">
             <router-link v-if="!isLoggedIn" to="/login">Login</router-link>
