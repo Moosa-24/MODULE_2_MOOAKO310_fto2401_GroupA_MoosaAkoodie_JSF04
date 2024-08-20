@@ -50,6 +50,7 @@ Persistence: Your filter and sorting choices will be preserved as you navigate b
 Vue 3: For building the user interface.
 Vue Router: For navigating between product grid and detailed views.
 HTML/CSS: For structuring and styling the app.
+AI Assistance: Portions of the code and content in this project were generated with the help of ChatGPT(such as jsdoc comments). I acknowledge the use of this AI tool in the development process.
 
 # App Currently Deployed
 
