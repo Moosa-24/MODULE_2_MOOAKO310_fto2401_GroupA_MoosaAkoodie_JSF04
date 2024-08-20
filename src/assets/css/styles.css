@@ -493,3 +493,121 @@ button[type="submit"]:hover {
 .clear-wishlist:hover {
   background-color: #c0392b;
 }
+
+/* Light Theme */
+body.light-theme {
+  background-color: #ccf8fc;
+  color: #333;
+}
+
+.light-theme .container {
+  background-color: #fff;
+  color: #333;
+}
+
+.light-theme .header {
+  background-color: #767c89;
+  color: #fff;
+}
+
+.light-theme .product-card {
+  background-color: #fff;
+  border-color: #ccc;
+}
+
+.light-theme .product-title,
+.light-theme .product-price,
+.light-theme .product-category {
+  color: #333;
+}
+
+.light-theme .add-to-cart {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.light-theme .add-to-cart:hover {
+  background-color: #0056b3;
+}
+
+.light-theme .wishlist-item {
+  background-color: #f9f9f9;
+  border-color: #ddd;
+}
+
+.light-theme .remove-item,
+.light-theme .clear-wishlist {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.light-theme .remove-item:hover,
+.light-theme .clear-wishlist:hover {
+  background-color: #c0392b;
+}
+
+/* Dark Theme */
+body.dark-theme {
+  background-color: #1a1a1a;
+  color: #f1f1f1;
+}
+
+.dark-theme .container {
+  background-color: #333;
+  color: #f1f1f1;
+}
+
+.dark-theme .header {
+  background-color: #121212;
+  color: #f1f1f1;
+}
+
+.dark-theme .product-card {
+  background-color: #2c2c2c;
+  border-color: #444;
+}
+
+.dark-theme .product-title,
+.dark-theme .product-price,
+.dark-theme .product-category {
+  color: #f1f1f1;
+}
+
+.dark-theme .add-to-cart {
+  background-color: #28a745;
+  color: #fff;
+}
+
+.dark-theme .add-to-cart:hover {
+  background-color: #218838;
+}
+
+.dark-theme .wishlist-item {
+  background-color: #2c2c2c;
+  border-color: #444;
+}
+
+.dark-theme .remove-item,
+.dark-theme .clear-wishlist {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.dark-theme .remove-item:hover,
+.dark-theme .clear-wishlist:hover {
+  background-color: #c0392b;
+}
+
+/* Additional Theme-Specific Adjustments */
+.dark-theme .header-content a,
+.light-theme .header-content a {
+  color: inherit;
+}
+
+.dark-theme .favorites-icon::before {
+  content: "🖤"; /* Dark heart for dark theme */
+}
+
+.light-theme .favorites-icon::before {
+  content: "🤍"; /* Light heart for light theme */
+}
