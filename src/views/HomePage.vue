@@ -81,14 +81,14 @@
 export default {
   data() {
     return {
-      products: [],
-      categories: [],
-      selectedCategory: '',
-      selectedSort: '',
-      cartCount: 0,
-      loading: false,
-      originalProducts: [],
-      isLoggedIn: !!localStorage.getItem('token')
+      products: [], // List of products fetched from the API
+      categories: [], // List of product categories
+      selectedCategory: '', // Currently selected category for filtering
+      selectedSort: '', // Currently selected sort order
+      cartCount: 0, // Number of items in the cart
+      loading: false, // Indicates if data is being loaded
+      originalProducts: [], // Original list of products before sorting
+      isLoggedIn: !!localStorage.getItem('token') // Check if the user is logged in
     };
   },
   mounted() {
@@ -100,6 +100,10 @@ export default {
     this.loadCart();
   },
   methods: {
+    /**
+     * Fetch products based on the selected category.
+     * @param {string} category - The category to filter products by.
+     */
     async fetchProducts(category) {
       this.loading = true;
       let url = 'https://fakestoreapi.com/products';
@@ -110,7 +114,7 @@ export default {
       const data = await response.json();
       this.products = data.map(product => ({
         ...product,
-        rating: Math.floor(Math.random() * 5) + 1
+        rating: Math.floor(Math.random() * 5) + 1 // Add random rating to each product
       }));
       this.originalProducts = [...this.products];
       this.sortProducts();
@@ -119,14 +123,26 @@ export default {
         this.loading = false;
       }, 2000);
     },
+    
+    /**
+     * Fetch product categories from the API.
+     */
     async fetchCategories() {
       const response = await fetch('https://fakestoreapi.com/products/categories');
       this.categories = await response.json();
     },
+    
+    /**
+     * Filter products based on the selected category.
+     */
     filterProducts() {
       this.updateQueryParams();
       this.fetchProducts(this.selectedCategory);
     },
+    
+    /**
+     * Sort products based on the selected sort order.
+     */
     sortProducts() {
       if (this.selectedSort === 'asc') {
         this.products.sort((a, b) => a.price - b.price);
@@ -136,6 +152,11 @@ export default {
         this.products = [...this.originalProducts];
       }
     },
+    
+    /**
+     * Navigate to the product detail page.
+     * @param {number} id - The ID of the product to view.
+     */
     goToProduct(id) {
       this.$router.push({
         name: 'ProductDetail',
@@ -146,6 +167,11 @@ export default {
         }
       });
     },
+    
+    /**
+     * Add a product to the shopping cart.
+     * @param {Object} product - The product to add to the cart.
+     */
     addToCart(product) {
       let cart = JSON.parse(localStorage.getItem('cart')) || [];
       const existingItem = cart.find(item => item.id === product.id);
@@ -157,6 +183,11 @@ export default {
       localStorage.setItem('cart', JSON.stringify(cart));
       this.loadCart();
     },
+    
+    /**
+     * Add a product to the wishlist.
+     * @param {Object} product - The product to add to the wishlist.
+     */
     addToWishlist(product) {
       let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
       if (!wishlist.find(item => item.id === product.id)) {
@@ -164,10 +195,18 @@ export default {
         localStorage.setItem('wishlist', JSON.stringify(wishlist));
       }
     },
+    
+    /**
+     * Load the number of items in the cart from local storage.
+     */
     loadCart() {
       let cart = JSON.parse(localStorage.getItem('cart')) || [];
       this.cartCount = cart.reduce((count, item) => count + item.quantity, 0);
     },
+    
+    /**
+     * Update query parameters in the URL for filtering and sorting.
+     */
     updateQueryParams() {
       this.$router.push({
         query: {
@@ -176,6 +215,10 @@ export default {
         }
       });
     },
+    
+    /**
+     * Handle user logout by clearing local storage and redirecting to home page.
+     */
     logout() {
       localStorage.removeItem('token');
       localStorage.removeItem('cart');
@@ -183,11 +226,19 @@ export default {
       this.cartCount = 0;
       this.$router.push('/');
     },
+    
+    /**
+     * Navigate to the wishlist page.
+     */
     goToWishlist() {
       this.$router.push('/wishlist');
     }
   },
   computed: {
+    /**
+     * Get the list of displayed products, which is empty while loading.
+     * @returns {Array} - List of products to display.
+     */
     displayedProducts() {
       return this.loading ? [] : this.products;
     }

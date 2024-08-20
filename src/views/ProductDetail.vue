@@ -57,18 +57,29 @@
 export default {
   data() {
     return {
+      /** @type {Object} Product details */
       product: {},
+      /** @type {boolean} User login status */
       isLoggedIn: !!localStorage.getItem('token'),
+      /** @type {number} Number of items in the cart */
       cartCount: 0
     };
   },
   async mounted() {
+    /**
+     * Fetches the product details based on the product ID from the route parameters and loads cart information.
+     * @returns {Promise<void>}
+     */
     const productId = this.$route.params.id;
     const response = await fetch(`https://fakestoreapi.com/products/${productId}`);
     this.product = await response.json();
     this.loadCart();
   },
   methods: {
+    /**
+     * Adds a product to the shopping cart. If the product already exists, increments its quantity.
+     * @param {Object} product - The product to add to the cart.
+     */
     addToCart(product) {
       let cart = JSON.parse(localStorage.getItem('cart')) || [];
       const existingItem = cart.find(item => item.id === product.id);
@@ -80,6 +91,10 @@ export default {
       localStorage.setItem('cart', JSON.stringify(cart));
       this.loadCart();
     },
+    /**
+     * Adds a product to the wishlist if it is not already in the wishlist.
+     * @param {Object} product - The product to add to the wishlist.
+     */
     addToWishlist(product) {
       let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
       const existingItem = wishlist.find(item => item.id === product.id);
@@ -88,6 +103,11 @@ export default {
         localStorage.setItem('wishlist', JSON.stringify(wishlist));
       }
     },
+    /**
+     * Adds a product to the comparison list if the user is logged in.
+     * Alerts the user if they are not logged in.
+     * @param {Object} product - The product to add to the comparison list.
+     */
     addToComparison(product) {
       if (!this.isLoggedIn) {
         alert('You must be logged in to add items to the comparison list.');
@@ -101,10 +121,16 @@ export default {
         localStorage.setItem('comparisonList', JSON.stringify(comparisonList));
       }
     },
+    /**
+     * Loads the number of items in the cart from local storage.
+     */
     loadCart() {
       let cart = JSON.parse(localStorage.getItem('cart')) || [];
       this.cartCount = cart.reduce((count, item) => count + item.quantity, 0);
     },
+    /**
+     * Logs out the user by removing all relevant data from local storage and redirects to the home page.
+     */
     logout() {
       localStorage.removeItem('token');
       localStorage.removeItem('cart');
@@ -114,6 +140,9 @@ export default {
       this.cartCount = 0;
       this.$router.push('/');
     },
+    /**
+     * Navigates to the home page.
+     */
     goToHomePage() {
       this.$router.push('/');
     }

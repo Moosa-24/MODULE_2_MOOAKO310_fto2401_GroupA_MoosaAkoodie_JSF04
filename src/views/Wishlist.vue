@@ -83,16 +83,54 @@
 export default {
   data() {
     return {
+      /**
+       * Array of wishlist items.
+       * @type {Array<Object>}
+       */
       wishlistItems: [],
+
+      /**
+       * Flag indicating whether the user is logged in.
+       * @type {boolean}
+       */
       isLoggedIn: !!localStorage.getItem('token'),
+
+      /**
+       * Count of items in the shopping cart.
+       * @type {number}
+       */
       cartCount: 0,
+
+      /**
+       * Count of items in the wishlist.
+       * @type {number}
+       */
       wishlistCount: 0,
-      categories: [], // Will be filled with categories from the API
+
+      /**
+       * Array of categories fetched from the API.
+       * @type {Array<string>}
+       */
+      categories: [],
+
+      /**
+       * Selected category for filtering wishlist items.
+       * @type {string}
+       */
       selectedCategory: '',
+
+      /**
+       * Selected sorting option for wishlist items.
+       * @type {string}
+       */
       selectedSort: 'price-asc' // Default sorting option
     };
   },
   computed: {
+    /**
+     * Returns the wishlist items filtered and sorted based on the selected options.
+     * @returns {Array<Object>}
+     */
     filteredAndSortedWishlistItems() {
       let filteredItems = this.wishlistItems;
       if (this.selectedCategory) {
@@ -123,15 +161,26 @@ export default {
     }
   },
   methods: {
+    /**
+     * Loads the wishlist items from local storage and updates the wishlist count.
+     */
     loadWishlist() {
       let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
       this.wishlistItems = wishlist;
       this.wishlistCount = wishlist.length;
     },
+
+    /**
+     * Loads the cart items from local storage and updates the cart count.
+     */
     loadCart() {
       let cart = JSON.parse(localStorage.getItem('cart')) || [];
       this.cartCount = cart.reduce((count, item) => count + item.quantity, 0);
     },
+
+    /**
+     * Fetches product categories from the API and updates the categories array.
+     */
     loadCategories() {
       fetch('https://fakestoreapi.com/products/categories')
         .then(res => res.json())
@@ -139,12 +188,22 @@ export default {
           this.categories = json;
         });
     },
+
+    /**
+     * Removes an item from the wishlist based on its ID.
+     * @param {number} productId - The ID of the product to remove.
+     */
     removeFromWishlist(productId) {
       let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
       wishlist = wishlist.filter(item => item.id !== productId);
       localStorage.setItem('wishlist', JSON.stringify(wishlist));
       this.loadWishlist();
     },
+
+    /**
+     * Adds a product to the cart. If the product already exists in the cart, increases its quantity.
+     * @param {Object} product - The product to add to the cart.
+     */
     addToCart(product) {
       let cart = JSON.parse(localStorage.getItem('cart')) || [];
       const existingItem = cart.find(item => item.id === product.id);
@@ -156,16 +215,32 @@ export default {
       localStorage.setItem('cart', JSON.stringify(cart));
       this.loadCart();
     },
+
+    /**
+     * Clears all items from the wishlist.
+     */
     clearWishlist() {
       localStorage.removeItem('wishlist');
       this.loadWishlist();
     },
+
+    /**
+     * Applies the selected category filter to the wishlist items.
+     */
     applyFilters() {
       this.loadWishlist();
     },
+
+    /**
+     * Applies the selected sorting option to the wishlist items.
+     */
     applySort() {
       this.loadWishlist();
     },
+
+    /**
+     * Logs out the user by removing the token, cart, and wishlist from local storage.
+     */
     logout() {
       localStorage.removeItem('token');
       localStorage.removeItem('cart');
@@ -175,6 +250,10 @@ export default {
       this.wishlistCount = 0;
       this.$router.push('/');
     },
+
+    /**
+     * Navigates to the home page.
+     */
     goToHomePage() {
       this.$router.push('/');
     }

@@ -63,17 +63,42 @@
 export default {
   data() {
     return {
+      /**
+       * @type {string}
+       */
       username: '',
+      /**
+       * @type {string}
+       */
       password: '',
+      /**
+       * @type {boolean}
+       */
       loading: false,
+      /**
+       * @type {string|null}
+       */
       error: null,
+      /**
+       * @type {string}
+       */
       passwordFieldType: 'password',
     };
   },
   methods: {
+    /**
+     * Toggles the visibility of the password field.
+     * @returns {void}
+     */
     togglePasswordVisibility() {
       this.passwordFieldType = this.passwordFieldType === 'password' ? 'text' : 'password';
     },
+    
+    /**
+     * Handles the login process.
+     * @async
+     * @returns {Promise<void>}
+     */
     async login() {
       if (!this.username || !this.password) {
         this.error = "Username and password cannot be empty.";
@@ -110,6 +135,11 @@ export default {
         this.loading = false;
       }
     },
+    
+    /**
+     * Navigates to the home page.
+     * @returns {void}
+     */
     goToHomePage() {
       this.$router.push('/');
     }

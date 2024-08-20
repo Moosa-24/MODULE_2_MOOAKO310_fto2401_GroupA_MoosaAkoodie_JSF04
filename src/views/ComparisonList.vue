@@ -74,8 +74,20 @@
 export default {
   data() {
     return {
+      /**
+       * List of items in the comparison list.
+       * @type {Array<Object>}
+       */
       comparisonList: [],
+      /**
+       * Indicates if the user is logged in.
+       * @type {boolean}
+       */
       isLoggedIn: !!localStorage.getItem('token'),
+      /**
+       * The number of items in the cart.
+       * @type {number}
+       */
       cartCount: 0
     };
   },
@@ -88,18 +100,31 @@ export default {
     }
   },
   methods: {
+    /**
+     * Clears the comparison list.
+     */
     clearComparisonList() {
       localStorage.removeItem('comparisonList');
       this.comparisonList = [];
     },
+    /**
+     * Removes a product from the comparison list by its ID.
+     * @param {number} productId - The ID of the product to remove.
+     */
     removeFromComparison(productId) {
       this.comparisonList = this.comparisonList.filter(item => item.id !== productId);
       localStorage.setItem('comparisonList', JSON.stringify(this.comparisonList));
     },
+    /**
+     * Loads the cart data and updates the cart count.
+     */
     loadCart() {
       let cart = JSON.parse(localStorage.getItem('cart')) || [];
       this.cartCount = cart.reduce((count, item) => count + item.quantity, 0);
     },
+    /**
+     * Logs the user out by clearing the token, cart, and comparison list.
+     */
     logout() {
       localStorage.removeItem('token');
       localStorage.removeItem('cart');
@@ -108,6 +133,9 @@ export default {
       this.cartCount = 0;
       this.$router.push('/');
     },
+    /**
+     * Navigates to the home page.
+     */
     goToHomePage() {
       this.$router.push('/');
     }
@@ -116,7 +144,6 @@ export default {
 </script>
 
 <style scoped>
-
 .comparison-icon {
   margin-right: 0.5rem;
 }

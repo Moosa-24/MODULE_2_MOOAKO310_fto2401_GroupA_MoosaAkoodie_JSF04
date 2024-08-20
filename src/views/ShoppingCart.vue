@@ -75,31 +75,47 @@
 export default {
   data() {
     return {
-      cartItems: [],
-      isLoggedIn: !!localStorage.getItem('token'),
-      cartCount: 0
+      cartItems: [], // List of items in the cart
+      isLoggedIn: !!localStorage.getItem('token'), // Boolean indicating whether the user is logged in
+      cartCount: 0 // Total number of items in the cart
     };
   },
   computed: {
+    /**
+     * Calculates the total cost of items in the cart.
+     * @returns {number} The total cost.
+     */
     totalCost() {
       return this.cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
     }
   },
   mounted() {
-    this.loadCart();
+    this.loadCart(); // Load cart items when the component is mounted
   },
   methods: {
+    /**
+     * Loads cart items from localStorage and updates the cart count.
+     */
     loadCart() {
       let cart = JSON.parse(localStorage.getItem('cart')) || [];
       this.cartItems = cart;
       this.cartCount = cart.reduce((count, item) => count + item.quantity, 0);
     },
+    /**
+     * Removes an item from the cart by its product ID.
+     * @param {number} productId - The ID of the product to remove.
+     */
     removeFromCart(productId) {
       let cart = JSON.parse(localStorage.getItem('cart')) || [];
       cart = cart.filter(item => item.id !== productId);
       localStorage.setItem('cart', JSON.stringify(cart));
       this.loadCart();
     },
+    /**
+     * Updates the quantity of an item in the cart.
+     * @param {number} productId - The ID of the product to update.
+     * @param {number} newQuantity - The new quantity of the product.
+     */
     updateQuantity(productId, newQuantity) {
       let cart = JSON.parse(localStorage.getItem('cart')) || [];
       cart = cart.map(item => 
@@ -108,10 +124,16 @@ export default {
       localStorage.setItem('cart', JSON.stringify(cart));
       this.loadCart();
     },
+    /**
+     * Clears all items from the cart.
+     */
     clearCart() {
       localStorage.removeItem('cart');
       this.loadCart();
     },
+    /**
+     * Logs out the user by removing the token and cart data, and redirects to the home page.
+     */
     logout() {
       localStorage.removeItem('token');
       localStorage.removeItem('cart');
@@ -119,6 +141,9 @@ export default {
       this.cartCount = 0;
       this.$router.push('/');
     },
+    /**
+     * Redirects to the home page.
+     */
     goToHomePage() {
       this.$router.push('/');
     }
