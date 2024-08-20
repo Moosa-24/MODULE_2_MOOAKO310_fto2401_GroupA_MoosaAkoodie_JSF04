@@ -18,6 +18,9 @@ Filtering: Filter products by category effortlessly.
 Sorting: Sort products by price (lowest to highest or highest to lowest).
 Loading States: Visual loading indicators while data is being fetched.
 Persistence: Your filters and sorting settings persist even when navigating between product details and the main grid.
+Users(logging in): Log in and have your changes(such as favorites,etc) saved in local storage
+Comparison List: Add items to compare things such as prices, category and more
+Shopping List: Add items to a shopping list for Checkout - checkout not implemented yet
 
 # Getting Started
 Clone the Repo:
@@ -35,7 +38,6 @@ npm run dev
 Open Your Browser:
 
 Navigate to the port specified to see the app in action.
-
 
 # How to Use It?
 Filtering: Select a category in the filter component to view products from that category.
