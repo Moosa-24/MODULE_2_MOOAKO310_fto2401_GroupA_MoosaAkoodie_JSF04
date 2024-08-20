@@ -18,12 +18,6 @@ Filtering: Filter products by category effortlessly.
 Sorting: Sort products by price (lowest to highest or highest to lowest).
 Loading States: Visual loading indicators while data is being fetched.
 Persistence: Your filters and sorting settings persist even when navigating between product details and the main grid.
-File Breakdown
-index.html: The main HTML file.
-App.vue: The root Vue component for the app.
-ProductDetail.vue: Shows detailed product information.
-assets/
-styles.css: Contains global styles for the app.
 
 # Getting Started
 Clone the Repo:
@@ -40,7 +34,7 @@ Run the Development Server:
 npm run dev
 Open Your Browser:
 
-Navigate to http://localhost:3000 (or the port specified) to see the app in action.
+Navigate to the port specified to see the app in action.
 
 
 # How to Use It?
