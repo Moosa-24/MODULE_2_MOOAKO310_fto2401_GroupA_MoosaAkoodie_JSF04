@@ -4,6 +4,7 @@ import ProductDetail from '../views/ProductDetail.vue';
 import Login from '../views/Login.vue';
 import ShoppingCart from '../views/ShoppingCart.vue';
 import ComparisonList from '../views/ComparisonList.vue';
+import Wishlist from '../views/Wishlist.vue';
 
 const routes = [
   { path: '/', component: HomePage },
@@ -30,7 +31,18 @@ const routes = [
         next({ path: '/login', query: { redirect: to.fullPath } });
       }
     }
-  }
+  },
+  {
+    path: '/wishlist',
+    component: Wishlist,
+    beforeEnter: (to, from, next) => {
+      if (localStorage.getItem('token')) {
+        next();
+      } else {
+        next({ path: '/login', query: { redirect: to.fullPath } });
+      }
+    }
+  },
 ];
 
 const router = createRouter({

@@ -9,7 +9,7 @@
         </div>
         <div class="header-right">
           <h3 class="wishlist">
-            <a href="#" class="wishlist-btn">
+            <a href="/wishlist" class="wishlist-btn">
               <span class="wishlist-icon">♡</span>
               <span class="wishlist-text">Wishlist</span>
             </a>
@@ -68,7 +68,7 @@
           <p class="product-category">{{ product.category }}</p>
           <p class="product-price">${{ product.price }}</p>
           <button class="add-to-cart" @click.stop="addToCart(product)">Add to Cart</button>
-          <button class="favorites-btn">
+          <button class="favorites-btn" @click.stop="addToWishlist(product)">
             <span class="favorites-icon"></span>
           </button>
         </div>
@@ -157,6 +157,13 @@ export default {
       localStorage.setItem('cart', JSON.stringify(cart));
       this.loadCart();
     },
+    addToWishlist(product) {
+      let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+      if (!wishlist.find(item => item.id === product.id)) {
+        wishlist.push(product);
+        localStorage.setItem('wishlist', JSON.stringify(wishlist));
+      }
+    },
     loadCart() {
       let cart = JSON.parse(localStorage.getItem('cart')) || [];
       this.cartCount = cart.reduce((count, item) => count + item.quantity, 0);
@@ -175,6 +182,9 @@ export default {
       this.isLoggedIn = false;
       this.cartCount = 0;
       this.$router.push('/');
+    },
+    goToWishlist() {
+      this.$router.push('/wishlist');
     }
   },
   computed: {

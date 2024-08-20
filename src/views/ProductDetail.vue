@@ -9,7 +9,7 @@
         </div>
         <div class="header-right">
           <h3 class="wishlist">
-            <a href="#" class="wishlist-btn">
+            <a href="/wishlist" class="wishlist-btn">
               <span class="wishlist-icon">♡</span>
               <span class="wishlist-text">Wishlist</span>
             </a>
@@ -45,6 +45,9 @@
       <p class="product-price">${{ product.price }}</p>
       <p class="product-description">{{ product.description }}</p>
       <button class="add-to-cart" @click="addToCart(product)">Add to Cart</button>
+      <button class="favorites-btn" @click="addToWishlist(product)">
+        <span class="favorites-icon"></span>
+      </button>
       <button @click="addToComparison(product)">Add to Comparison</button>
     </div>
   </div>
@@ -77,6 +80,14 @@ export default {
       localStorage.setItem('cart', JSON.stringify(cart));
       this.loadCart();
     },
+    addToWishlist(product) {
+      let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+      const existingItem = wishlist.find(item => item.id === product.id);
+      if (!existingItem) {
+        wishlist.push(product);
+        localStorage.setItem('wishlist', JSON.stringify(wishlist));
+      }
+    },
     addToComparison(product) {
       if (!this.isLoggedIn) {
         alert('You must be logged in to add items to the comparison list.');
@@ -98,6 +109,7 @@ export default {
       localStorage.removeItem('token');
       localStorage.removeItem('cart');
       localStorage.removeItem('comparisonList');
+      localStorage.removeItem('wishlist');
       this.isLoggedIn = false;
       this.cartCount = 0;
       this.$router.push('/');

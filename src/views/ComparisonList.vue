@@ -9,10 +9,10 @@
         </div>
         <div class="header-right">
           <h3 class="wishlist">
-            <a href="#" class="wishlist-btn">
+            <router-link to="/wishlist" class="wishlist-btn">
               <span class="wishlist-icon">♡</span>
-              <span>Wishlist</span>
-            </a>
+              <span class="wishlist-text">Wishlist</span>
+            </router-link>
           </h3>
           <div class="cart">
             <a href="/cart">
